@@ -1,0 +1,10 @@
+stateDiagram-v2
+    [*] --> ActiveQueue: Q0
+    ActiveQueue --> UserBuried: Q1
+    ActiveQueue --> SchedBuried: Q2
+    ActiveQueue --> Suspended: Q3
+    UserBuried --> ActiveQueue: Q4
+    SchedBuried --> ActiveQueue: Q4
+    UserBuried --> Suspended: Suspend
+    SchedBuried --> Suspended: Suspend
+    Suspended --> ActiveQueue: Q5

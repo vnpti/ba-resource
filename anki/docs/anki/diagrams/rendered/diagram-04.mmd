@@ -1,0 +1,13 @@
+flowchart TD
+    A[Người học chọn deck] --> B[Backend gom card theo due limit bury]
+    B --> C{Có card phục vụ?}
+    C -->|Không| D[Hiển thị kết thúc phiên và trạng thái chờ]
+    C -->|Có| E[Hiện câu hỏi]
+    E --> F[Người học tự nhớ và Show Answer]
+    F --> G[Chọn Again Hard Good Easy]
+    G --> H{Current state còn khớp?}
+    H -->|Không| I[Từ chối câu trả lời state cũ và tải lại]
+    I --> B
+    H -->|Có| J[Transaction cập nhật card revlog counters]
+    J --> K[Xử lý leech và siblings theo cấu hình]
+    K --> B

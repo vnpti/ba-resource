@@ -1,0 +1,30 @@
+sequenceDiagram
+    actor U as Người dùng
+    participant UI as Anki Desktop
+    participant C as Collection Sync
+    participant S as AnkiWeb hoặc Sync Server
+    participant M as Media Sync
+    U->>UI: Sync profile đã cấu hình
+    UI->>C: Bắt đầu sync collection
+    C->>S: Trao đổi sync metadata
+    S-->>C: Modified schema USN
+    alt Không có thay đổi collection
+        C-->>UI: Không cần merge collection
+    else Schema tương thích
+        C->>S: Trao đổi changes chunks graves
+        S-->>C: Changes chunks phía server
+        C->>C: Merge record theo USN/mtime và ghi revlog
+        C-->>UI: Collection sync kết thúc
+    else Cần full sync
+        C-->>UI: Yêu cầu chọn upload hoặc download khả dụng
+        UI->>U: Chọn phía collection giữ lại
+        U-->>UI: Upload hoặc Download
+        UI->>C: Thực hiện hướng đã chọn
+        C->>S: Upload collection hoặc yêu cầu download
+        S-->>C: Kết quả hoặc collection tải về
+        C-->>UI: Collection sync kết thúc
+    end
+    UI->>M: Đồng bộ media theo tiến trình riêng
+    M->>S: Merge thay đổi file media
+    S-->>M: Thay đổi và dữ liệu file
+    M-->>UI: Media hoàn tất hoặc báo lỗi

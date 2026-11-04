@@ -1,0 +1,59 @@
+erDiagram
+    COLLECTION ||--o{ NOTE : contains
+    COLLECTION ||--o{ NOTETYPE : contains
+    COLLECTION ||--o{ DECK : contains
+    NOTETYPE ||--|{ FIELD : defines
+    NOTETYPE ||--|{ TEMPLATE : defines
+    NOTETYPE ||--o{ NOTE : types
+    NOTE ||--o{ CARD : generates
+    DECK ||--o{ CARD : currently_contains
+    DECKCONFIG ||--o{ NORMAL_DECK : configures
+    CARD ||--o{ REVLOG : records
+    NOTE }o--o{ MEDIA_FILE : references_by_name
+    NOTE {
+      integer id PK
+      text guid
+      integer mid
+      text flds
+      text tags
+    }
+    CARD {
+      integer id PK
+      integer nid
+      integer did
+      integer ord
+      integer type
+      integer queue
+      integer due
+    }
+    FIELD {
+      integer ntid PK
+      integer ord PK
+      text name
+      blob config
+    }
+    TEMPLATE {
+      integer ntid PK
+      integer ord PK
+      text name
+      blob config
+    }
+    NOTETYPE {
+      integer id PK
+      text name UK
+      blob config
+    }
+    DECK {
+      integer id PK
+      text name UK
+      blob kind
+    }
+    REVLOG {
+      integer id PK
+      integer cid
+      integer ease
+    }
+    MEDIA_FILE {
+      text fname PK
+      text csum
+    }

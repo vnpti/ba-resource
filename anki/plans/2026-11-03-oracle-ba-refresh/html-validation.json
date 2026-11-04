@@ -1,0 +1,18 @@
+{
+  "desktop": {
+    "articles": 24,
+    "diagrams": 6,
+    "brokenAnchors": [],
+    "machineLinks": 0,
+    "externalScripts": 0,
+    "horizontalOverflow": false
+  },
+  "mobile": {
+    "articles": 24,
+    "diagrams": 6,
+    "brokenAnchors": [],
+    "machineLinks": 0,
+    "externalScripts": 0,
+    "horizontalOverflow": false
+  }
+}

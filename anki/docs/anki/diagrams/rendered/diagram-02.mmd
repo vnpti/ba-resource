@@ -1,0 +1,12 @@
+stateDiagram-v2
+    [*] --> New: Sinh card
+    New --> Learning: N1
+    New --> Review: N2
+    Learning --> Learning: L1 / L2
+    Learning --> Review: Good [L3]
+    Learning --> Review: Easy
+    Review --> Review: R1 / R2
+    Review --> Relearning: R3
+    Relearning --> Relearning: RL1 / RL2
+    Relearning --> Review: RL3
+    Relearning --> Review: Easy

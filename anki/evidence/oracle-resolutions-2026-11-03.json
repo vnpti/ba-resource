@@ -1,0 +1,270 @@
+{
+  "version": "1.0.1",
+  "date": "2026-11-03",
+  "commit": "136bd42bfbd356fc756b6d3e28cc77b02da11ea7",
+  "authority": "static source review; not runtime evidence",
+  "runtime_tests_executed": 0,
+  "cases": [
+    {
+      "ac_id": "AC-ANKI-035",
+      "title": "Optimize không có lịch sử giữ nguyên tham số",
+      "given": "collection tạm F035-empty có 0 note/card/revlog; deck D035 dùng preset P035 đã lưu, FSRS bật, fsrs_params_4/5/6 đều []; search và ignore-before date rỗng, relearnSteps=[10], healthCheck=false, reschedule=false; mở lại Deck Options, không có assignment chưa lưu hoặc tác vụ đang chạy",
+      "when": "bấm Optimize current preset một lần và chờ request cùng thông báo hoàn tất, chưa bấm Save hoặc Optimize All",
+      "then": "backend trả thành công params=[], fsrs_items=0, health_check_passed absent (không phải false); UI hiện khóa deck-config-fsrs-params-no-reviews; tham số form và preset đã lưu không đổi, counts note/card/revlog vẫn 0/0/0; computingParams trở về false",
+      "mode": "Deck Options Optimize current preset và ComputeFsrsParams nội bộ",
+      "preconditions": "môi trường cô lập ở mục 1, locale English để đối chiếu FTL; đã lưu FSRS/preset trước snapshot; không add-on hoặc sync song song; harness quan sát backend và UI thật, không dùng response giả để chứng minh backend",
+      "steps": [
+        "Dựng F035-empty, lưu rồi mở lại Deck Options; chụp counts và các mảng params trong form/preset.",
+        "Bấm Optimize current preset một lần; kiểm request search preset:\"P035\" -is:suspended, current_params=[], ignore_revlogs_before_ms=0, num_of_relearning_steps=1, health_check=false.",
+        "Đọc response thành công: params=[], fsrs_items=0, optional health_check_passed vắng mặt.",
+        "Chờ alert theo sự kiện UI; đối chiếu khóa deck-config-fsrs-params-no-reviews trong FTL English, đóng alert; kiểm computingParams=false và params form vẫn [].",
+        "So snapshot trước/sau Optimize, trước Save: preset params và counts không đổi; lưu actual riêng từng lớp quan sát rồi cleanup C0."
+      ],
+      "limits": "0 training item là nhánh return sớm, không phải lỗi thiếu 400/1000 reviews và không có mô hình cá nhân hóa mới. Không áp oracle này cho Optimize All hoặc preset assignment chưa lưu. Nếu chỉ quan sát UI thì lớp response backend vẫn chưa được kiểm thử. Source tĩnh, chưa chạy test.",
+      "cleanup": "đóng collection/preset test, trả locale và clock, giữ evidence trước khi xóa duy nhất thư mục F035-empty.",
+      "sources": [
+        {
+          "path": "ts/routes/deck-options/FsrsOptions.svelte",
+          "line": 200
+        },
+        {
+          "path": "ts/routes/deck-options/FsrsOptions.svelte",
+          "line": 225
+        },
+        {
+          "path": "ts/routes/deck-options/FsrsOptions.svelte",
+          "line": 235
+        },
+        {
+          "path": "rslib/src/scheduler/service/mod.rs",
+          "line": 264
+        },
+        {
+          "path": "rslib/src/scheduler/fsrs/params.rs",
+          "line": 95
+        },
+        {
+          "path": "proto/anki/scheduler.proto",
+          "line": 357
+        },
+        {
+          "path": "ftl/core/deck-config.ftl",
+          "line": 495
+        }
+      ]
+    },
+    {
+      "ac_id": "AC-ANKI-067",
+      "title": "True retention đếm cả hai lượt cùng card trong ngày",
+      "given": "fixture F067-min có đúng một card cid=1001 và hai revlog: id=1793682000000/ease=1 rồi id=1793685600000/ease=3; cả hai type=Review(1), lastIvl=20, factor=2500, ivl=1, usn=-1, time=1000; không có log khác; clock=2026-11-03T12:00:00Z, offset UTC, rollover 04:00, next_day_at=1793764800; search=\"\", days=0 và locale en-US",
+      "when": "lấy graph data All history và xem True retention ở các chế độ Young, Mature, All; sau đó lấy lại với search cid:1001",
+      "then": "today/week/month/year/allTime đều có young_passed=1, young_failed=1, mature_passed=0, mature_failed=0; Count=2, Young và Total=50.0%, Mature=N/A; yesterday có bốn counter=0, Count=0 và các tỷ lệ N/A; search cid:1001 không đổi kết quả; không bỏ lượt Good thứ hai cùng ngày",
+      "mode": "GraphData/TrueRetention qua storage → aggregation → UI",
+      "preconditions": "collection disposable, không sync/add-on; harness cố định clock/offset/rollover trước khi tạo/mở collection và chèn raw revlog; xác nhận next_day_at thật, không ghi DB khi app đang giữ transaction; fixture này kiểm aggregation, không giả định hai log được sinh bằng chuỗi answer UI",
+      "steps": [
+        "Dựng F067-min; đọc lại đúng hai row cùng cid, rating 1 và 3, cùng lastIvl=20; xác nhận next_day_at=1793764800.",
+        "Gọi graph data search rỗng, days=0; đối chiếu bốn counter ở cả sáu cửa sổ như Expected.",
+        "Mở True retention Young/Mature/All; đối chiếu Count và tỷ lệ, dùng tổng pass chia tổng mẫu, không lấy trung bình tỷ lệ các nhóm.",
+        "Đổi search thành cid:1001, days=0; xác nhận hai log vẫn được lấy, Today Count=2 và 50.0%, Yesterday Count=0 và N/A.",
+        "Lưu response/UI và môi trường khi thực thi; trả clock/timezone rồi cleanup C0."
+      ],
+      "limits": "Oracle As-Is theo pipeline source đếm từng log đủ điều kiện, khác manual first review/card/day. Chỉ giải quyết kết quả hiện hành; quyết định sửa manual hay đổi sản phẩm còn mở. Fixture tối thiểu này không chứng minh mọi bộ lọc/biên; fixture mở rộng 22 row nằm trong báo cáo retention riêng, chưa thực thi.",
+      "cleanup": "đóng và xóa riêng collection/card/revlog test sau khi lưu evidence; trả clock, UTC offset, rollover và locale.",
+      "sources": [
+        {
+          "path": "rslib/src/storage/revlog/get.sql",
+          "line": 1
+        },
+        {
+          "path": "rslib/src/storage/revlog/mod.rs",
+          "line": 122
+        },
+        {
+          "path": "rslib/src/storage/revlog/mod.rs",
+          "line": 175
+        },
+        {
+          "path": "rslib/src/stats/graphs/mod.rs",
+          "line": 31
+        },
+        {
+          "path": "rslib/src/stats/graphs/retention.rs",
+          "line": 16
+        },
+        {
+          "path": "rslib/src/stats/graphs/retention.rs",
+          "line": 53
+        },
+        {
+          "path": "rslib/src/revlog/mod.rs",
+          "line": 107
+        },
+        {
+          "path": "ts/routes/graphs/true-retention.ts",
+          "line": 105
+        },
+        {
+          "path": "docs-site/manual/stats.mdx",
+          "line": 229
+        }
+      ]
+    },
+    {
+      "ac_id": "AC-ANKI-072",
+      "title": "Hai profile cùng account và lựa chọn full sync",
+      "given": "F072 có hai profile tạm A/B, collection path riêng; cùng auth của một user SimpleServer đúng commit, auto-sync/media/add-on tắt; A có một note/card ONLY_A, B có một note/card ONLY_B với ID/GUID khác; server đã nhận full upload A; B và server đều có card, B.scm khác S.scm và B.mod khác S.mod; snapshot từng nhánh độc lập",
+      "when": "B bấm Sync, quan sát FullSyncRequired có upload_ok=true và download_ok=true, rồi chọn Cancel, Download hoặc Upload trên từng snapshot mới",
+      "then": "không có chặn trùng account trong caller đã khảo sát; Cancel không gọi full upload/download và giữ ONLY_B ở B, ONLY_A ở server/A; Download thay active B bằng snapshot A từ server, ONLY_B không còn ở active B; Upload thay active server bằng B nhưng A local vẫn giữ ONLY_A vì chưa sync tiếp; collection paths vẫn riêng và không có namespace server riêng theo tên profile",
+      "mode": "Switch Profile + auth theo profile + UI full collection sync với SimpleServer cô lập",
+      "preconditions": "server test cùng commit, user test riêng, endpoint loopback explicit; không dùng TEST_ENDPOINT ambient hoặc account production; mọi collection integrity hợp lệ, request thành công; tắt media sync; đo scm/mod và nonempty trước mỗi nhánh, không suy từ tên profile hoặc thời gian tạo; snapshot sau chuẩn bị A upload; client và server test dùng cùng clock t0, xác nhận timestamp đồng bộ trước request để không rẽ nhánh clock-off",
+      "steps": [
+        "Dựng F072 và auth cùng user cho A/B; xác nhận paths khác nhau. Nếu dùng login qua nút Sync, callback sẽ tiếp tục sync, phải quan sát prompt thay vì coi login chỉ lưu cấu hình.",
+        "Đọc metadata B/server: cả hai nonempty, scm khác và mod khác; lưu tập note/card IDs, fields, scheduling và revlog của A/B/server.",
+        "Nhánh Cancel: B bấm Sync, kiểm full-choice prompt, chọn Cancel; không có full transfer, nội dung A/B/server giữ như trước.",
+        "Restore F072 và server; nhánh Download: B chọn Download, quan sát yêu cầu backup, chờ download/reopen xong; B có dữ liệu server A, không merge phần chỉ có ở B; không khẳng định backup đã bị xóa.",
+        "Restore F072 và server; nhánh Upload: B chọn Upload, chờ xong; server có ONLY_B và không có ONLY_A, B giữ B, A local vẫn A vì chưa sync A.",
+        "Ghi actual riêng từng nhánh, auth/path và prompt; cleanup C0 cùng server/process/account test do TC tạo."
+      ],
+      "limits": "Oracle cho SimpleServer và caller desktop tại commit. Khi mod bằng nhau có thể NoChanges trước khi xét schema; khi schema chung có thể normal merge. B rỗng/server nonempty chỉ cho Download. Không suy thành mọi lần trùng account đều full-sync, mất dữ liệu ngay hoặc server hosted có cùng implementation. Cancel chỉ cam kết nội dung collection, không cam kết byte-identical metadata/profile.",
+      "cleanup": "dừng server test do TC khởi tạo; xóa riêng profiles A/B, server user/data và backups test sau khi lưu evidence redacted; không đụng tài khoản thật.",
+      "sources": [
+        {
+          "path": "qt/aqt/profiles.py",
+          "line": 212
+        },
+        {
+          "path": "qt/aqt/profiles.py",
+          "line": 659
+        },
+        {
+          "path": "qt/aqt/profiles.py",
+          "line": 681
+        },
+        {
+          "path": "qt/aqt/sync.py",
+          "line": 307
+        },
+        {
+          "path": "rslib/src/sync/http_server/mod.rs",
+          "line": 122
+        },
+        {
+          "path": "rslib/src/sync/collection/meta.rs",
+          "line": 59
+        },
+        {
+          "path": "qt/aqt/sync.py",
+          "line": 138
+        },
+        {
+          "path": "rslib/src/sync/collection/download.rs",
+          "line": 35
+        },
+        {
+          "path": "rslib/src/sync/collection/upload.rs",
+          "line": 79
+        },
+        {
+          "path": "rslib/src/sync/collection/tests.rs",
+          "line": 591
+        },
+        {
+          "path": "docs-site/manual/profiles.mdx",
+          "line": 5
+        }
+      ]
+    },
+    {
+      "ac_id": "AC-ANKI-077",
+      "title": "Media cùng tên khác hash với thứ tự sync xác định",
+      "given": "F077 có C1/C2 và SimpleServer S cùng user test, media DB/folder riêng, cursors=0 và S trống USN0; C1 thêm shared.png=A và C2 thêm shared.png=B qua add_file ở folder trống, hai entry dirty=true; A/B là PNG 1×1/69byte có bytes PNG trong mục dữ liệu TC-ANKI-077, SHA1 A=2732f12a8f18d27cf0fa78ef41091bfa1ccec9ce, B=3b37538efb87e9eb1c6d547562f499932b894f17; không sửa đồng thời",
+      "when": "chạy media sync C1 hoàn tất rồi C2 hoàn tất rồi C1 kiểm tra lại; lặp trên fixture reset với thứ tự đảo; sau đó kiểm nhánh C2 sửa B khi toàn bộ đã đồng nhất A ở USN1 và server không có thay đổi mới",
+      "then": "thứ tự C1→C2: C2 fetch server USN1 và download A dù B local dirty, ghi đè shared.png, DB clean và không upload B; C1/C2/S đều hash A, server vẫn USN1 và có một filename; không tạo hash-suffix hay bản B trong media.trash. Đảo thứ tự cho hash B. Nhánh sửa sau đồng nhất: C2 dirty B với cursor1=S.USN1 sẽ upload B lên S.USN2, rồi C1 fetch B; các bên hash B. Không dùng file mtime để chọn winner",
+      "mode": "MediaSyncer/backend RPC + status completion + media filesystem/DB và SimpleServer test",
+      "preconditions": "endpoint/user cô lập đúng commit; chỉ media sync, không Check Media hoặc collection sync; filename ASCII/NFC shared.png hợp lệ; payloads khác hash; mỗi nhánh restore dữ liệu/cursor và đảm bảo ChangeTracker thấy thay đổi. RPC start không được coi là sync hoàn tất",
+      "steps": [
+        "Giải mã hai PNG ở fixture_details hoặc dùng evidence/fixtures/media-a.png và media-b.png; kiểm byte length và SHA1, tạo hai folders trống rồi add_file với cùng tên shared.png. Xác nhận dirty/cursors/server USN đúng F077.",
+        "Sync C1 và poll status tới inactive, không lỗi. Xác nhận S shared.png hash A, USN1, C1 clean/cursor1.",
+        "Sync C2 tới completion: quan sát fetch shared.png/USN1/hash A trước upload; kiểm C2 bytes A, dirty=false/cursor1, không còn pending B và S.USN không tăng do B. Sync C1 lại, xác nhận tất cả hash A/count1 và không có file suffix/trash B.",
+        "Restore F077; chạy C2→C1→C2; xác nhận tất cả hash B/count1, server USN1.",
+        "Restore trạng thái ba bên A/USN1; đổi file C2 thành B, đảm bảo folder/file mtime được nhận diện và xác nhận dirty B bằng tracker/harness trước network (không sleep rồi đoán). S vẫn USN1. Sync C2 rồi C1: S lên USN2, các bên B/clean.",
+        "Lưu before/after hashes, cursor/dirty/USN và thứ tự request cho từng nhánh; cleanup C0."
+      ],
+      "limits": "Server-favors yêu cầu remote change chưa được client nhận; local dirty một mình không bảo vệ file trước nhánh download. Hai upload in-flight chưa có thứ tự thì không có winner duy nhất; server self-host nhận upload khác hash sau có thể thay nội dung. Local add_file vào folder đã có tên dùng hash-suffix là luồng khác. Không khẳng định rollback filesystem khi I/O/network lỗi hoặc hosted AnkiWeb đã được kiểm thử.",
+      "cleanup": "đóng clients, dừng server test và xóa riêng media folders/DB/trash/payloads test sau khi lưu hashes và evidence; giữ source/collection người dùng nguyên vẹn.",
+      "sources": [
+        {
+          "path": "rslib/src/sync/media/syncer.rs",
+          "line": 60
+        },
+        {
+          "path": "rslib/src/sync/media/changes.rs",
+          "line": 44
+        },
+        {
+          "path": "rslib/src/media/files.rs",
+          "line": 403
+        },
+        {
+          "path": "rslib/src/sync/media/database/client/mod.rs",
+          "line": 206
+        },
+        {
+          "path": "rslib/src/sync/media/database/server/entry/upload.rs",
+          "line": 35
+        },
+        {
+          "path": "rslib/src/sync/media/tests.rs",
+          "line": 278
+        },
+        {
+          "path": "rslib/src/backend/sync.rs",
+          "line": 188
+        },
+        {
+          "path": "rslib/src/sync/media/database/client/changetracker.rs",
+          "line": 56
+        },
+        {
+          "path": "rslib/src/media/files.rs",
+          "line": 165
+        }
+      ],
+      "fixture_details": "**PNG fixture (Base64, giải mã thành đúng 69 byte):**\n\nA: `iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC`\n\nB: `iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGNgYPgPAAEDAQAIicLsAAAAAElFTkSuQmCC`"
+    }
+  ],
+  "source_sha256": {
+    "docs-site/manual/profiles.mdx": "e6fca07ea5ad982fac4e79834797df1ac7e4c97a35138d94f3ff1ebebb378af6",
+    "docs-site/manual/stats.mdx": "57a95ceb3da8f9fc67a874333a5dbc6ef6f8caf65f6688b30591de536850bd06",
+    "ftl/core/deck-config.ftl": "113802c0fafca4c3914dfb1bf0b86fb8f6a59598a88fa84f16d144e135b5d75b",
+    "proto/anki/scheduler.proto": "9ebdd150185cdaccef2a7957481361b869344e573cce4dc0be77489cac7b71e3",
+    "qt/aqt/profiles.py": "7bcdda41d20465a4f906f59b4284af08df39a3578a04da092199f16005c5964f",
+    "qt/aqt/sync.py": "df0a8afbb76a26883695a314f8cb4fc418cce68ad5eaff8a8113ac56c94ab3d7",
+    "rslib/src/backend/sync.rs": "4c566a35870859e77f75eba9ccc8c43530d9584a5ec17869f25108a6bb858de8",
+    "rslib/src/media/files.rs": "a1650ae7eadf96985f6cf5f9aecf362675edff3ad4561d397be0b78b3b5c2e69",
+    "rslib/src/revlog/mod.rs": "e528d4708a21ae2da87705434249e2e842155e3a34161d556979e5d611b63faa",
+    "rslib/src/scheduler/fsrs/params.rs": "2476453eb3bbeb39ca8db4ebe9af6c5068e21096f0644d042320ec714c48ba7e",
+    "rslib/src/scheduler/service/mod.rs": "de65847d35d79aba01143053f55a3498ad2e007228edfad9ad9910e606569f3e",
+    "rslib/src/stats/graphs/mod.rs": "924e71be1bce1e25fcd6307b210ddb71e8a31824e7f199eb933980c379f77711",
+    "rslib/src/stats/graphs/retention.rs": "82288515d7eb4077702ed42c9eb3cf1aacf50dd482f8302c79e04475ebf46f2f",
+    "rslib/src/storage/revlog/get.sql": "2eb279e429df394461840030f14d4ebfafa77e0e5495d02ed31f54fd7c2b2585",
+    "rslib/src/storage/revlog/mod.rs": "80a41b5cdcda8dc78dbd9d2713abdd2d7d12e2f4958fac8ced3d3a218bf6bf94",
+    "rslib/src/sync/collection/download.rs": "b9a51730df45dbf750214cfdc7361a9a60f01b62884b6a85e6e74433c7af1b7c",
+    "rslib/src/sync/collection/meta.rs": "285d1e20ee6b5d9211f70d537c608e01c747091320e0ab811ddae6f337d4073a",
+    "rslib/src/sync/collection/tests.rs": "4e9308ef827b4e20d29278a944e2e805380f4c13ad2897045613528045efc51d",
+    "rslib/src/sync/collection/upload.rs": "bc17480df7749ad0f31e105c0b7243aa9b106aa4fad6f44d9be31e75befb9200",
+    "rslib/src/sync/http_server/mod.rs": "94268865658332ab355d9217fc1c0b639fef3a9258693eb2e794100da601be8e",
+    "rslib/src/sync/media/changes.rs": "b3417a1d15d89514dc123680d47692dec5cc43a0cffb4e46a1e7902e220d7823",
+    "rslib/src/sync/media/database/client/changetracker.rs": "7d3fbe053e83a322da2dba49bbd0f229c4ce283145a5280a5807d7ab136b09e9",
+    "rslib/src/sync/media/database/client/mod.rs": "e07639f5018eac52b29657dda99eb9e16f186e734b6b3e530c75f6af93059e81",
+    "rslib/src/sync/media/database/server/entry/upload.rs": "633f35039eda4af0a71b105d0c5d45e0c47823189ce04cdc17da3d5a2f70fef2",
+    "rslib/src/sync/media/syncer.rs": "56c44068f4e0faa6e0b65b5f9a64caf1cba864af16e129ee5c6ef89e27ed89d7",
+    "rslib/src/sync/media/tests.rs": "5ea9878c438be103151d09757a5c64cd728a7f8e291fa25fa480bfcf9cd17629",
+    "ts/routes/deck-options/FsrsOptions.svelte": "6f2e09dd3f492861a5722bc4714b310b5e3dd72bbd18929ba12ee75d3dd5e954",
+    "ts/routes/graphs/true-retention.ts": "9b74548d4bc2af09e2b9ba100e2f22453bb9b56c4f0d9a6337a12c304b19779f"
+  },
+  "fixture_sha1": {
+    "media-a.png": "2732f12a8f18d27cf0fa78ef41091bfa1ccec9ce",
+    "media-b.png": "3b37538efb87e9eb1c6d547562f499932b894f17"
+  }
+}

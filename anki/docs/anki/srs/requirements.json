@@ -1,0 +1,1330 @@
+{
+  "version": "1.0.1",
+  "commit": "136bd42bfbd356fc756b6d3e28cc77b02da11ea7",
+  "requirements": [
+    {
+      "id": "FR-CNT-NOTE-001",
+      "title": "Soạn và sửa note",
+      "priority": "P0 (BA proposed)",
+      "input": "NoteType, field values, tags, deck đích",
+      "processing": "Kiểm tra số field, chuẩn hóa và lưu note; sinh card phù hợp, giữ lịch của card hiện có",
+      "output": "Note và card có thể học; lỗi khi cấu trúc không hợp lệ",
+      "br_ids": [
+        "BR-ANKI-001",
+        "BR-ANKI-003"
+      ],
+      "err_ids": [
+        "ERR-ANKI-000-01"
+      ],
+      "sources": [
+        {
+          "path": "rslib/src/notes/mod.rs",
+          "line": 194
+        },
+        {
+          "path": "rslib/src/notetype/cardgen.rs",
+          "line": 95
+        }
+      ]
+    },
+    {
+      "id": "FR-CNT-TYPE-001",
+      "title": "Quản lý NoteType, field và template",
+      "priority": "P0 (BA proposed)",
+      "input": "Tên, field definitions, question/answer templates",
+      "processing": "Validate cấu trúc tối thiểu; chuẩn hóa tên và cập nhật template khi đổi field",
+      "output": "NoteType cập nhật trong collection; card sinh theo cấu hình",
+      "br_ids": [
+        "BR-ANKI-002",
+        "BR-ANKI-003"
+      ],
+      "err_ids": [
+        "ERR-ANKI-000-02"
+      ],
+      "sources": [
+        {
+          "path": "rslib/src/notetype/mod.rs",
+          "line": 484
+        },
+        {
+          "path": "proto/anki/notetypes.proto",
+          "line": 102
+        }
+      ]
+    },
+    {
+      "id": "FR-CNT-CLOZ-001",
+      "title": "Tạo thẻ cloze",
+      "priority": "P1 (BA proposed)",
+      "input": "Note chứa c1/c2… và cloze NoteType",
+      "processing": "Trích số cloze, dùng template cloze, tạo ordinal còn thiếu",
+      "output": "Card tương ứng từng số cloze, nhiều đoạn cùng số che cùng lượt",
+      "br_ids": [
+        "BR-ANKI-001",
+        "BR-ANKI-004"
+      ],
+      "err_ids": [
+        "ERR-ANKI-000-01"
+      ],
+      "sources": [
+        {
+          "path": "rslib/src/notetype/cardgen.rs",
+          "line": 160
+        },
+        {
+          "path": "docs-site/manual/editing.mdx",
+          "line": 364
+        }
+      ]
+    },
+    {
+      "id": "FR-CNT-IMGO-001",
+      "title": "Tạo image occlusion",
+      "priority": "P1 (BA proposed)",
+      "input": "Ảnh, shapes/groups, header/back extra",
+      "processing": "Lưu cấu trúc occlusion kiểu cloze; tạo card theo shape/group; overlay chỉ hiển thị",
+      "output": "Note ảnh với card che vùng; xóa shape cần kiểm tra Empty Cards",
+      "br_ids": [
+        "BR-ANKI-003",
+        "BR-ANKI-005"
+      ],
+      "err_ids": [],
+      "sources": [
+        {
+          "path": "rslib/src/image_occlusion/notetype.rs",
+          "line": 59
+        },
+        {
+          "path": "docs-site/manual/editing.mdx",
+          "line": 504
+        }
+      ]
+    },
+    {
+      "id": "FR-ORG-DECK-001",
+      "title": "Tổ chức deck và subdeck",
+      "priority": "P0 (BA proposed)",
+      "input": "Deck, tên phân cấp, card cần chuyển, preset",
+      "processing": "Tổ chức card theo deck; học deck gồm descendants; card siblings có thể khác deck",
+      "output": "Cây deck và phạm vi học xác định",
+      "br_ids": [
+        "BR-ANKI-006",
+        "BR-ANKI-012"
+      ],
+      "err_ids": [],
+      "sources": [
+        {
+          "path": "docs-site/manual/getting-started.mdx",
+          "line": 75
+        },
+        {
+          "path": "rslib/src/scheduler/queue/builder/mod.rs",
+          "line": 135
+        }
+      ]
+    },
+    {
+      "id": "FR-ORG-SRCH-001",
+      "title": "Tìm kiếm và quản lý tags/flags",
+      "priority": "P0 (BA proposed)",
+      "input": "Chuỗi search field/tag/flag/deck/state và toán tử; tập note/card được chọn; thao tác thêm, gỡ, đổi tên hoặc tổ chức tag; flag được chọn",
+      "processing": "Áp cú pháp search chung Browse/filtered; tìm văn bản trong field, không mặc định tags. Thêm/gỡ tag trên notes được chọn, đổi tên/tổ chức tags theo Browser; tag ở note nên siblings cùng nhận. Đặt/gỡ flag trên cards được chọn, mỗi card tối đa một flag, không thay flag siblings khác",
+      "output": "Tập note/card khớp; tags hoặc flags cập nhật đúng cấp và phạm vi lựa chọn; truy vấn đơn thuần không sửa dữ liệu",
+      "br_ids": [
+        "BR-ANKI-007"
+      ],
+      "err_ids": [],
+      "sources": [
+        {
+          "path": "docs-site/manual/searching.mdx",
+          "line": 5
+        },
+        {
+          "path": "docs-site/manual/browsing.mdx",
+          "line": 216
+        },
+        {
+          "path": "docs-site/manual/browsing.mdx",
+          "line": 240
+        },
+        {
+          "path": "docs-site/manual/editing.mdx",
+          "line": 226
+        }
+      ]
+    },
+    {
+      "id": "FR-LRN-REV-001",
+      "title": "Học và tự đánh giá card",
+      "priority": "P0 (BA proposed)",
+      "input": "Deck, card được chọn, rating, thời gian",
+      "processing": "Hiện hỏi rồi đáp án; nhận tự chấm; commit AnswerCard sau kiểm tra state; lặp theo queue",
+      "output": "Card cập nhật, revlog, thống kê và card tiếp hoặc thông tin hết phiên",
+      "br_ids": [
+        "BR-ANKI-006",
+        "BR-ANKI-008",
+        "BR-ANKI-011"
+      ],
+      "err_ids": [
+        "ERR-ANKI-000-03"
+      ],
+      "sources": [
+        {
+          "path": "docs-site/manual/studying.mdx",
+          "line": 40
+        },
+        {
+          "path": "rslib/src/scheduler/answering/mod.rs",
+          "line": 315
+        }
+      ]
+    },
+    {
+      "id": "FR-LRN-SCH-001",
+      "title": "Chuyển trạng thái và xếp lịch",
+      "priority": "P0 (BA proposed)",
+      "input": "Current state, rating, steps và cấu hình thuật toán",
+      "processing": "Tính bốn next states; áp learning/relearning/review, interval có fuzz và giới hạn",
+      "output": "Due/state mới; lapse khi thất bại Review",
+      "br_ids": [
+        "BR-ANKI-009",
+        "BR-ANKI-010",
+        "BR-ANKI-011",
+        "BR-ANKI-013"
+      ],
+      "err_ids": [
+        "ERR-ANKI-000-03"
+      ],
+      "sources": [
+        {
+          "path": "proto/anki/scheduler.proto",
+          "line": 80
+        },
+        {
+          "path": "rslib/src/scheduler/states/review.rs",
+          "line": 64
+        }
+      ]
+    },
+    {
+      "id": "FR-LRN-LIM-001",
+      "title": "Giới hạn khối lượng học",
+      "priority": "P0 (BA proposed)",
+      "input": "Preset, override deck/today, counts, cờ limits",
+      "processing": "Tính giới hạn còn lại và cây deck; gom learning/new/review theo điều kiện",
+      "output": "Queue và counts bị giới hạn; intraday vẫn có thể tiếp tục",
+      "br_ids": [
+        "BR-ANKI-006",
+        "BR-ANKI-012"
+      ],
+      "err_ids": [],
+      "sources": [
+        {
+          "path": "rslib/src/decks/limits.rs",
+          "line": 98
+        },
+        {
+          "path": "rslib/src/scheduler/queue/builder/gathering.rs",
+          "line": 23
+        }
+      ]
+    },
+    {
+      "id": "FR-LRN-FSRS-001",
+      "title": "Cấu hình và tối ưu FSRS",
+      "priority": "P1 (BA proposed)",
+      "input": "Cờ FSRS, desired retention, params, review history, reschedule choice",
+      "processing": "Bật toàn cục; tối ưu từ history theo scope; 0 training item trả nguyên params/count0/health absent; UI current preset báo không có reviews; reschedule theo lựa chọn",
+      "output": "Tham số và lịch theo nhánh; zero-item không tạo tham số cá nhân hóa mới; không cam kết đạt retention thực tế",
+      "br_ids": [
+        "BR-ANKI-013",
+        "BR-ANKI-014"
+      ],
+      "err_ids": [],
+      "sources": [
+        {
+          "path": "rslib/src/scheduler/answering/mod.rs",
+          "line": 484
+        },
+        {
+          "path": "docs-site/manual/deck-options.mdx",
+          "line": 406
+        },
+        {
+          "path": "docs-site/manual/deck-options.mdx",
+          "line": 500
+        },
+        {
+          "path": "ts/routes/deck-options/FsrsOptions.svelte",
+          "line": 200
+        },
+        {
+          "path": "ts/routes/deck-options/FsrsOptions.svelte",
+          "line": 225
+        },
+        {
+          "path": "ts/routes/deck-options/FsrsOptions.svelte",
+          "line": 235
+        },
+        {
+          "path": "rslib/src/scheduler/service/mod.rs",
+          "line": 264
+        },
+        {
+          "path": "rslib/src/scheduler/fsrs/params.rs",
+          "line": 95
+        },
+        {
+          "path": "proto/anki/scheduler.proto",
+          "line": 357
+        },
+        {
+          "path": "ftl/core/deck-config.ftl",
+          "line": 495
+        }
+      ]
+    },
+    {
+      "id": "FR-LRN-HIDE-001",
+      "title": "Bury, suspend và xử lý leech",
+      "priority": "P0 (BA proposed)",
+      "input": "Card/note IDs, mode, sibling options, leech threshold/action",
+      "processing": "Ẩn theo mode; unbury qua rollover/manual; phát leech và tag note/suspend card theo cấu hình",
+      "output": "Card được loại/phục hồi queue; trạng thái trí nhớ nền bảo toàn",
+      "br_ids": [
+        "BR-ANKI-015",
+        "BR-ANKI-016"
+      ],
+      "err_ids": [],
+      "sources": [
+        {
+          "path": "rslib/src/scheduler/bury_and_suspend.rs",
+          "line": 32
+        },
+        {
+          "path": "rslib/src/scheduler/answering/mod.rs",
+          "line": 194
+        }
+      ]
+    },
+    {
+      "id": "FR-LRN-FILT-001",
+      "title": "Học tập mục tiêu qua filtered deck",
+      "priority": "P1 (BA proposed)",
+      "input": "Search/order/limit, reschedule flag, preview delays",
+      "processing": "Build tập hợp lệ; dùng home deck hoặc preview; Empty/Rebuild phục hồi rồi xây lại",
+      "output": "Deck tạm, card học và trả home; lịch đổi chỉ theo chế độ",
+      "br_ids": [
+        "BR-ANKI-017",
+        "BR-ANKI-018",
+        "BR-ANKI-019"
+      ],
+      "err_ids": [
+        "ERR-ANKI-000-04"
+      ],
+      "sources": [
+        {
+          "path": "rslib/src/scheduler/filtered/mod.rs",
+          "line": 123
+        },
+        {
+          "path": "rslib/src/scheduler/states/preview_filter.rs",
+          "line": 25
+        }
+      ]
+    },
+    {
+      "id": "FR-DAT-TEXT-001",
+      "title": "Nhập dữ liệu text",
+      "priority": "P0 (BA proposed)",
+      "input": "UTF-8 file, delimiter/mapping, GUID hoặc first field, duplicate policy",
+      "processing": "Đọc hàng; resolve type/deck; đối chiếu GUID/first field; thêm, giữ, cập nhật hoặc báo lỗi hàng",
+      "output": "Notes/cards nhập, kết quả added/updated/conflict/error; card cũ giữ lịch khi update",
+      "br_ids": [
+        "BR-ANKI-001",
+        "BR-ANKI-020"
+      ],
+      "err_ids": [
+        "ERR-ANKI-000-05",
+        "ERR-ANKI-000-06",
+        "ERR-ANKI-000-07"
+      ],
+      "sources": [
+        {
+          "path": "rslib/src/import_export/text/import.rs",
+          "line": 250
+        },
+        {
+          "path": "rslib/src/import_export/text/import.rs",
+          "line": 318
+        }
+      ]
+    },
+    {
+      "id": "FR-DAT-PKG-001",
+      "title": "Trao đổi deck/collection package",
+      "priority": "P0 (BA proposed)",
+      "input": "apkg/colpkg, update/merge policy, scheduling/media options",
+      "processing": "apkg merge note GUID và thêm card thiếu; colpkg thay collection; export chọn phạm vi và media",
+      "output": "Package hoặc collection cập nhật; khác biệt lịch/media theo loại gói",
+      "br_ids": [
+        "BR-ANKI-021",
+        "BR-ANKI-022"
+      ],
+      "err_ids": [
+        "ERR-ANKI-000-08"
+      ],
+      "sources": [
+        {
+          "path": "rslib/src/import_export/package/apkg/import/notes.rs",
+          "line": 333
+        },
+        {
+          "path": "rslib/src/import_export/package/apkg/import/cards.rs",
+          "line": 99
+        },
+        {
+          "path": "rslib/src/import_export/package/colpkg/import.rs",
+          "line": 31
+        }
+      ]
+    },
+    {
+      "id": "FR-DAT-SYNC-001",
+      "title": "Đồng bộ collection",
+      "priority": "P0 (BA proposed)",
+      "input": "Local/remote changes, metadata/schema, tài khoản/endpoint, lựa chọn full sync",
+      "processing": "Merge record theo mtime/pending; nhập revlog; full upload/download khi cần; media riêng",
+      "output": "Collection đồng bộ theo nhánh; không hòa giải từng field",
+      "br_ids": [
+        "BR-ANKI-023",
+        "BR-ANKI-028"
+      ],
+      "err_ids": [],
+      "sources": [
+        {
+          "path": "rslib/src/sync/collection/chunks.rs",
+          "line": 162
+        },
+        {
+          "path": "rslib/src/sync/collection/meta.rs",
+          "line": 65
+        }
+      ]
+    },
+    {
+      "id": "FR-DAT-BACK-001",
+      "title": "Sao lưu và phục hồi",
+      "priority": "P0 (BA proposed)",
+      "input": "Collection thay đổi, lịch backup hoặc snapshot chọn restore",
+      "processing": "Tạo backup khi đủ điều kiện; restore thay dữ liệu; xuất colpkg media cho backup đầy đủ",
+      "output": "Snapshot/collection phục hồi; mất thay đổi sau snapshot; auto backup không media",
+      "br_ids": [
+        "BR-ANKI-022",
+        "BR-ANKI-024"
+      ],
+      "err_ids": [],
+      "sources": [
+        {
+          "path": "rslib/src/collection/backup.rs",
+          "line": 28
+        },
+        {
+          "path": "docs-site/manual/backups.mdx",
+          "line": 7
+        },
+        {
+          "path": "docs-site/manual/backups.mdx",
+          "line": 24
+        }
+      ]
+    },
+    {
+      "id": "FR-RPT-STAT-001",
+      "title": "Xem lịch sử và thống kê học",
+      "priority": "P1 (BA proposed)",
+      "input": "Review logs, card states, phạm vi deck/search và thời gian",
+      "processing": "Tổng hợp Today, đúng/sai, mature, retention và lịch tới hạn theo định nghĩa từng chỉ số",
+      "output": "True retention As-Is cộng từng revlog đủ điều kiện trong cửa sổ scheduler; cùng card/ngày có thể đóng góp nhiều lượt; discrepancy manual được ghi nhận",
+      "br_ids": [
+        "BR-ANKI-025"
+      ],
+      "err_ids": [],
+      "sources": [
+        {
+          "path": "rslib/src/stats/graphs/today.rs",
+          "line": 17
+        },
+        {
+          "path": "rslib/src/stats/graphs/retention.rs",
+          "line": 53
+        },
+        {
+          "path": "rslib/src/storage/revlog/get.sql",
+          "line": 1
+        },
+        {
+          "path": "rslib/src/storage/revlog/mod.rs",
+          "line": 122
+        },
+        {
+          "path": "rslib/src/storage/revlog/mod.rs",
+          "line": 175
+        },
+        {
+          "path": "rslib/src/stats/graphs/mod.rs",
+          "line": 31
+        },
+        {
+          "path": "rslib/src/stats/graphs/retention.rs",
+          "line": 16
+        },
+        {
+          "path": "rslib/src/revlog/mod.rs",
+          "line": 107
+        },
+        {
+          "path": "ts/routes/graphs/true-retention.ts",
+          "line": 105
+        },
+        {
+          "path": "docs-site/manual/stats.mdx",
+          "line": 229
+        }
+      ]
+    },
+    {
+      "id": "FR-EXT-ADD-001",
+      "title": "Quản lý add-on và mở rộng hooks/filters",
+      "priority": "P2 (BA proposed)",
+      "input": "Addon IDs hoặc package, danh sách addon chọn, yêu cầu tải/cài từ file/kiểm tra cập nhật/bật/tắt/xóa; callback hooks/filters và sự kiện ứng dụng",
+      "processing": "Tools Add-ons tải/cài package và kiểm tra cập nhật; bật/tắt ghi metadata, xử lý addon xung đột khi bật; xóa yêu cầu xác nhận. Ghi yêu cầu restart khi toggle hoặc xóa addon đang bật. Khi addon được nạp, gọi hooks/filters theo lifecycle đã định nghĩa; addon dùng chung profile",
+      "output": "Danh sách, metadata và trạng thái addon cập nhật theo kết quả; thông tin tải/cài/cập nhật/lỗi và restart khi được yêu cầu; callback chỉ tác động đúng lifecycle, không mặc nhiên mọi đường nhập",
+      "br_ids": [
+        "BR-ANKI-026",
+        "BR-ANKI-027"
+      ],
+      "err_ids": [],
+      "sources": [
+        {
+          "path": "docs-site/manual/addons.mdx",
+          "line": 9
+        },
+        {
+          "path": "qt/aqt/addons.py",
+          "line": 353
+        },
+        {
+          "path": "qt/aqt/addons.py",
+          "line": 446
+        },
+        {
+          "path": "qt/aqt/addons.py",
+          "line": 963
+        },
+        {
+          "path": "qt/aqt/addons.py",
+          "line": 990
+        },
+        {
+          "path": "qt/aqt/addons.py",
+          "line": 1011
+        },
+        {
+          "path": "qt/aqt/addons.py",
+          "line": 1043
+        },
+        {
+          "path": "docs-site/addons/hooks-and-filters.mdx",
+          "line": 7
+        },
+        {
+          "path": "pylib/tools/genhooks.py",
+          "line": 29
+        }
+      ]
+    },
+    {
+      "id": "FR-SYS-PROF-001",
+      "title": "Quản lý profile cục bộ",
+      "priority": "P1 (BA proposed)",
+      "input": "Profile được tạo/chọn và tài khoản sync tương ứng",
+      "processing": "Mở collection/settings/auth theo profile; addon dùng chung. Cùng account không được caller khảo sát bảo vệ bằng uniqueness; trên server test cùng user dùng chung remote collection, sync theo mod/schema và hướng được chọn",
+      "output": "Local paths riêng; Cancel/full Download/full Upload có kết quả dữ liệu riêng theo fixture; không phải tenant/RBAC",
+      "br_ids": [
+        "BR-ANKI-027"
+      ],
+      "err_ids": [],
+      "sources": [
+        {
+          "path": "docs-site/manual/profiles.mdx",
+          "line": 5
+        },
+        {
+          "path": "qt/aqt/profiles.py",
+          "line": 212
+        },
+        {
+          "path": "qt/aqt/profiles.py",
+          "line": 659
+        },
+        {
+          "path": "qt/aqt/profiles.py",
+          "line": 681
+        },
+        {
+          "path": "qt/aqt/sync.py",
+          "line": 307
+        },
+        {
+          "path": "rslib/src/sync/http_server/mod.rs",
+          "line": 122
+        },
+        {
+          "path": "rslib/src/sync/collection/meta.rs",
+          "line": 59
+        },
+        {
+          "path": "qt/aqt/sync.py",
+          "line": 138
+        },
+        {
+          "path": "rslib/src/sync/collection/download.rs",
+          "line": 35
+        },
+        {
+          "path": "rslib/src/sync/collection/upload.rs",
+          "line": 79
+        },
+        {
+          "path": "rslib/src/sync/collection/tests.rs",
+          "line": 591
+        }
+      ]
+    },
+    {
+      "id": "FR-DAT-MEDI-001",
+      "title": "Quản lý và kiểm tra media",
+      "priority": "P0 (BA proposed)",
+      "input": "Tham chiếu media, collection.media, trạng thái sync",
+      "processing": "Check thiếu/không dùng; sync media fetch remote trước upload pending, xử lý checksum/dirty/cursor; static template media dùng _",
+      "output": "Danh sách vấn đề và dữ liệu media theo nhánh; cùng filename chuẩn/khác hash có oracle xác định khi cố định cursor, dirty và thứ tự sync",
+      "br_ids": [
+        "BR-ANKI-028"
+      ],
+      "err_ids": [],
+      "sources": [
+        {
+          "path": "docs-site/manual/media.mdx",
+          "line": 24
+        },
+        {
+          "path": "docs-site/manual/syncing.mdx",
+          "line": 54
+        },
+        {
+          "path": "rslib/src/sync/media/syncer.rs",
+          "line": 60
+        },
+        {
+          "path": "rslib/src/sync/media/changes.rs",
+          "line": 44
+        },
+        {
+          "path": "rslib/src/media/files.rs",
+          "line": 403
+        },
+        {
+          "path": "rslib/src/sync/media/database/client/mod.rs",
+          "line": 206
+        },
+        {
+          "path": "rslib/src/sync/media/database/server/entry/upload.rs",
+          "line": 35
+        },
+        {
+          "path": "rslib/src/sync/media/tests.rs",
+          "line": 278
+        },
+        {
+          "path": "rslib/src/backend/sync.rs",
+          "line": 188
+        },
+        {
+          "path": "rslib/src/sync/media/database/client/changetracker.rs",
+          "line": 56
+        },
+        {
+          "path": "rslib/src/media/files.rs",
+          "line": 165
+        }
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "id": "BR-ANKI-001",
+      "title": "Cấu trúc note hợp lệ",
+      "when": "Lưu note với NoteType",
+      "then": "Số field values bằng số field NoteType; nội dung/tags ở note, lịch ở card",
+      "unless": "Không suy ra note thuộc đúng một deck",
+      "sources": [
+        {
+          "path": "rslib/src/notes/mod.rs",
+          "line": 194
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-002",
+      "title": "NoteType tối thiểu",
+      "when": "Thêm/cập nhật NoteType",
+      "then": "Có ít nhất một field, một template và tên không rỗng",
+      "unless": "Các bước chuẩn hóa tên được áp dụng trước/sau guard tương ứng; không suy ra UI trả nguyên thông báo kỹ thuật",
+      "sources": [
+        {
+          "path": "rslib/src/notetype/mod.rs",
+          "line": 484
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-003",
+      "title": "Sinh card theo nội dung",
+      "when": "Sinh card normal",
+      "then": "Chỉ thêm ordinal chưa có với mặt hỏi render được; template có thể override deck",
+      "unless": "ensure_not_empty có fallback ordinal 0; card trở thành rỗng không tự bị xóa ngay",
+      "sources": [
+        {
+          "path": "rslib/src/notetype/cardgen.rs",
+          "line": 95
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-004",
+      "title": "Sinh cloze",
+      "when": "Note có cloze numbers",
+      "then": "Các số cloze khác nhau sinh card khác nhau; cùng số dùng cùng card, template đầu tiên",
+      "unless": "Không coi mỗi vùng văn bản là một note",
+      "sources": [
+        {
+          "path": "rslib/src/notetype/cardgen.rs",
+          "line": 160
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-005",
+      "title": "Image occlusion",
+      "when": "Tạo shape/group trên ảnh",
+      "then": "Shape hoặc nhóm có thể tạo card cloze; text overlay không tạo card",
+      "unless": "Xóa shape không tự xóa card cũ; dùng Empty Cards",
+      "sources": [
+        {
+          "path": "docs-site/manual/editing.mdx",
+          "line": 504
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-006",
+      "title": "Phạm vi deck",
+      "when": "Chọn deck học",
+      "then": "Lấy card deck được chọn và descendants; card có một deck hiện tại",
+      "unless": "Siblings có thể nằm khác deck; filtered giữ home deck riêng",
+      "sources": [
+        {
+          "path": "docs-site/manual/studying.mdx",
+          "line": 10
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-007",
+      "title": "Tìm kiếm và cấp tác động tags/flags",
+      "when": "Tìm trong Browse/filtered hoặc quản lý tags/flags trên tập được chọn",
+      "then": "Search field trả card/note khớp theo chế độ; AND/OR/NOT và tag/flag/deck filters giới hạn tập. Thêm/gỡ/đổi tên/tổ chức tags tác động note; siblings cùng note chia sẻ tag. Flag tác động card được chọn, tối đa một flag tại một thời điểm",
+      "unless": "Văn bản đơn không tự tìm tags; tìm kiếm không sửa dữ liệu; đặt flag một card không đổi flag sibling khác; phạm vi rename/organize tag theo Browser khác với thêm/gỡ trên selection",
+      "sources": [
+        {
+          "path": "docs-site/manual/searching.mdx",
+          "line": 5
+        },
+        {
+          "path": "docs-site/manual/browsing.mdx",
+          "line": 216
+        },
+        {
+          "path": "docs-site/manual/browsing.mdx",
+          "line": 240
+        },
+        {
+          "path": "docs-site/manual/editing.mdx",
+          "line": 226
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-008",
+      "title": "Ý nghĩa rating",
+      "when": "Người học xem đáp án và đánh giá",
+      "then": "Again là không nhớ/sai; Hard, Good, Easy là nhớ với mức nỗ lực khác nhau",
+      "unless": "Hard không thay Again khi quên; không đo được hiểu biết ngoài tín hiệu tự chấm",
+      "sources": [
+        {
+          "path": "docs-site/manual/studying.mdx",
+          "line": 58
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-009",
+      "title": "Chuyển learning",
+      "when": "Card New/Learning có steps",
+      "then": "Again về bước đầu; Good tiến; Hard lặp bước với công thức riêng ở bước đầu; Easy sang Review",
+      "unless": "Steps rỗng hoặc FSRS short-term có nhánh khác; không ép mọi card đi qua số bước cố định",
+      "sources": [
+        {
+          "path": "rslib/src/scheduler/states/learning.rs",
+          "line": 39
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-010",
+      "title": "Lapse và relearning",
+      "when": "Card Review nhận Again",
+      "then": "Tăng lapse, tính lịch mới và vào Relearning nếu có steps; trả lời đúng tiếp tục Review",
+      "unless": "Again trong Relearning không tự tăng lapse lần nữa; không steps có thể về thẳng Review",
+      "sources": [
+        {
+          "path": "rslib/src/scheduler/states/review.rs",
+          "line": 95
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-011",
+      "title": "Ghi answer nguyên tử",
+      "when": "Nhận AnswerCard",
+      "then": "So current state sau hiệu chỉnh elapsed seconds; trong transaction áp dụng state, revlog, stats, bury và lưu card",
+      "unless": "State khác bị từ chối; cap thời gian theo preset; không tuyên bố xử lý mọi xung đột client",
+      "sources": [
+        {
+          "path": "rslib/src/scheduler/answering/mod.rs",
+          "line": 315
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-012",
+      "title": "Hạn mức học",
+      "when": "Xây queue hôm nay",
+      "then": "Ưu tiên mức today rồi deck rồi preset, trừ số đã học; mặc định new cũng tiêu thụ review limit",
+      "unless": "New cards ignore review limit tách new; parent limits áp dụng theo cờ; intraday learning không bị review limit chặn như interday",
+      "sources": [
+        {
+          "path": "rslib/src/decks/limits.rs",
+          "line": 98
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-013",
+      "title": "FSRS và SM-2",
+      "when": "Tính next states",
+      "then": "FSRS dùng memory state, retention, elapsed days, tham số; legacy dùng interval/ease/multiplier",
+      "unless": "Không sử dụng công thức ease SM-2 giải thích interval FSRS",
+      "sources": [
+        {
+          "path": "rslib/src/scheduler/answering/mod.rs",
+          "line": 484
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-014",
+      "title": "Cấu hình FSRS",
+      "when": "Bật FSRS hoặc đổi tham số/retention",
+      "then": "FSRS bật toàn cục; optimize từ lịch sử; reschedule on change quyết định cập nhật due cũ. Optimize current preset có 0 training item trả nguyên current_params, fsrs_items=0, health_check_passed absent; UI báo deck-config-fsrs-params-no-reviews và không gán params mới",
+      "unless": "Không đồng nhất raw revlog count với training items; không áp nhánh này cho Optimize All hoặc assignment chưa lưu. Retention là mục tiêu, không bảo đảm kết quả; runtime chưa chạy",
+      "sources": [
+        {
+          "path": "docs-site/manual/deck-options.mdx",
+          "line": 406
+        },
+        {
+          "path": "ts/routes/deck-options/FsrsOptions.svelte",
+          "line": 200
+        },
+        {
+          "path": "ts/routes/deck-options/FsrsOptions.svelte",
+          "line": 225
+        },
+        {
+          "path": "ts/routes/deck-options/FsrsOptions.svelte",
+          "line": 235
+        },
+        {
+          "path": "rslib/src/scheduler/service/mod.rs",
+          "line": 264
+        },
+        {
+          "path": "rslib/src/scheduler/fsrs/params.rs",
+          "line": 95
+        },
+        {
+          "path": "proto/anki/scheduler.proto",
+          "line": 357
+        },
+        {
+          "path": "ftl/core/deck-config.ftl",
+          "line": 495
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-015",
+      "title": "Bury và suspend",
+      "when": "Ẩn card khỏi queue",
+      "then": "Bury được phục hồi khi rollover ngày hoặc unbury; suspend tới khi unsuspend; không bury card suspended",
+      "unless": "Có tùy chọn bury interday learning; manual studying diễn đạt cũ không đủ phân biệt intraday/interday",
+      "sources": [
+        {
+          "path": "rslib/src/scheduler/bury_and_suspend.rs",
+          "line": 32
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-016",
+      "title": "Leech",
+      "when": "Review lapse đạt threshold dương",
+      "then": "Đánh dấu tại threshold rồi mỗi ceil(threshold/2); tag leech ở note; suspend nếu cấu hình yêu cầu",
+      "unless": "Threshold 0 không kích hoạt; leech action có thể chỉ tag",
+      "sources": [
+        {
+          "path": "rslib/src/scheduler/states/review.rs",
+          "line": 292
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-017",
+      "title": "Tập filtered",
+      "when": "Build/Rebuild filtered deck",
+      "then": "Search/order/limit lấy card, loại suspended/buried/đang filtered; rebuild trả thẻ cũ về rồi tìm lại",
+      "unless": "Zero result không được phép rỗng trả lỗi; đây là card tạm di chuyển, không copy",
+      "sources": [
+        {
+          "path": "rslib/src/scheduler/filtered/mod.rs",
+          "line": 123
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-018",
+      "title": "Filtered reschedule",
+      "when": "Học filtered với reschedule bật",
+      "then": "Dùng home deck settings; chuyển Review thì trả home, learning/relearning còn trong filtered",
+      "unless": "Review trước hạn có thuật toán riêng; không hứa lùi thêm nguyên interval",
+      "sources": [
+        {
+          "path": "rslib/src/scheduler/states/rescheduling_filter.rs",
+          "line": 25
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-019",
+      "title": "Filtered preview",
+      "when": "Học filtered với reschedule tắt",
+      "then": "Again/Hard/Good dùng delay; Easy hoặc bất kỳ delay=0 kết thúc, phục hồi home/queue",
+      "unless": "Vẫn có revlog; last_review_time không cập nhật như normal study",
+      "sources": [
+        {
+          "path": "rslib/src/scheduler/states/preview_filter.rs",
+          "line": 25
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-020",
+      "title": "Text import định danh",
+      "when": "Nhập hàng text",
+      "then": "Có GUID ưu tiên GUID; không GUID dùng first field và NoteType, có thể giới hạn deck; chọn update/preserve/duplicate",
+      "unless": "GUID có sẵn không tạo duplicate; NoteType xung đột ghi conflicting; first field rỗng/missing deck/type ghi lỗi hàng",
+      "sources": [
+        {
+          "path": "rslib/src/import_export/text/import.rs",
+          "line": 318
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-021",
+      "title": "Package merge và lịch cũ",
+      "when": "Nhập apkg",
+      "then": "Nhận diện note bằng GUID; policy IfNewer/Always/Never; card cũ theo note/template giữ lịch, chỉ nhập log card mới",
+      "unless": "Always vẫn bỏ khi mtime bằng nhau; không merge Normal/Cloze",
+      "sources": [
+        {
+          "path": "rslib/src/import_export/package/apkg/import/notes.rs",
+          "line": 333
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-022",
+      "title": "Phạm vi package",
+      "when": "Export/import apkg hoặc colpkg",
+      "then": "apkg bổ sung/cập nhật; colpkg thay collection và mang scheduling; tùy chọn media khi xuất",
+      "unless": "Import colpkg không xóa media cũ ngoài package; không có scheduling thì bản chia sẻ loại dữ liệu scheduling và marked/leech",
+      "sources": [
+        {
+          "path": "docs-site/manual/exporting.mdx",
+          "line": 34
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-023",
+      "title": "Sync record và full sync",
+      "when": "Đồng bộ collection",
+      "then": "Note/Card remote thay local khi local không pending hoặc remote mtime lớn hơn; revlog được nhập; khác schema yêu cầu full sync",
+      "unless": "Không merge từng field; cùng mtime với local pending không thay local tại bước đó; upload/download chọn một phía collection",
+      "sources": [
+        {
+          "path": "rslib/src/sync/collection/chunks.rs",
+          "line": 162
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-024",
+      "title": "Backup và phục hồi",
+      "when": "Tạo backup tự động hoặc restore",
+      "then": "Backup tự động giữ text/scheduling, không media; restore quay về snapshot và mất thay đổi sau đó",
+      "unless": "Không đổi collection thì bỏ backup kể cả force; muốn có media xuất colpkg Include Media",
+      "sources": [
+        {
+          "path": "rslib/src/collection/backup.rs",
+          "line": 28
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-025",
+      "title": "Đơn vị thống kê",
+      "when": "Tổng hợp Today và retention",
+      "then": "Today đếm lượt trả lời, Hard/Good/Easy là đúng; bỏ Manual/Rescheduled; mature theo interval trước >=21 ngày. True retention đếm mỗi revlog qua ease>0 và không phải Filtered factor=0, đồng thời type=Review hoặc lastIvl<=-86400 hoặc lastIvl>=1. Không dedup card/ngày; raw lastIvl>=21 là mature; Again fail, Hard/Good/Easy pass. Mỗi cửa sổ tính [start,end) theo next_day_at",
+      "unless": "Manual mô tả first review/card/day nhưng pipeline code không thực hiện; discrepancy còn cần quyết định To-Be. Search/days giới hạn dữ liệu trước tổng hợp; oracle toàn lịch sử dùng days=0. Retention và Today có predicate riêng",
+      "sources": [
+        {
+          "path": "rslib/src/stats/graphs/today.rs",
+          "line": 17
+        },
+        {
+          "path": "rslib/src/storage/revlog/get.sql",
+          "line": 1
+        },
+        {
+          "path": "rslib/src/storage/revlog/mod.rs",
+          "line": 122
+        },
+        {
+          "path": "rslib/src/storage/revlog/mod.rs",
+          "line": 175
+        },
+        {
+          "path": "rslib/src/stats/graphs/mod.rs",
+          "line": 31
+        },
+        {
+          "path": "rslib/src/stats/graphs/retention.rs",
+          "line": 16
+        },
+        {
+          "path": "rslib/src/stats/graphs/retention.rs",
+          "line": 53
+        },
+        {
+          "path": "rslib/src/revlog/mod.rs",
+          "line": 107
+        },
+        {
+          "path": "ts/routes/graphs/true-retention.ts",
+          "line": 105
+        },
+        {
+          "path": "docs-site/manual/stats.mdx",
+          "line": 229
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-026",
+      "title": "Quản lý addon và phạm vi hook",
+      "when": "Người dùng quản lý addon hoặc addon đăng ký hooks/filters",
+      "then": "Manager nhận ID/package, cài/kiểm tra cập nhật, bật/tắt và xóa addon được chọn; bật ghi metadata và xử lý xung đột; xóa cần xác nhận; toggle hoặc xóa addon đang bật yêu cầu restart. Hook/filter chạy theo lifecycle, nhiều addon gọi tuần tự",
+      "unless": "Không suy ra mọi thay đổi có hiệu lực tức thì trước restart; hủy xác nhận xóa không xóa addon; note_will_be_added không chạy khi import; sync_did_finish không bảo đảm media hoàn tất; tương thích addon phụ thuộc phiên bản và chưa kiểm thử bên thứ ba",
+      "sources": [
+        {
+          "path": "qt/aqt/addons.py",
+          "line": 353
+        },
+        {
+          "path": "qt/aqt/addons.py",
+          "line": 963
+        },
+        {
+          "path": "qt/aqt/addons.py",
+          "line": 990
+        },
+        {
+          "path": "qt/aqt/addons.py",
+          "line": 1011
+        },
+        {
+          "path": "qt/aqt/addons.py",
+          "line": 1043
+        },
+        {
+          "path": "pylib/tools/genhooks.py",
+          "line": 29
+        },
+        {
+          "path": "docs-site/manual/addons.mdx",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-027",
+      "title": "Cách ly profile",
+      "when": "Chuyển/tạo profile",
+      "then": "Mỗi profile giữ collection/settings và sync auth riêng, addon dùng chung. Caller khảo sát không reject account trùng profile; cùng user SimpleServer dẫn tới cùng server collection. Với local/remote nonempty, mod khác và schema khác: cho Upload/Download; Cancel không transfer, Download thay local, Upload thay server; profile local khác chưa sync không tự thay đổi",
+      "unless": "Manual khuyến cáo một account cho một profile để tránh ghi đè, không phải guard uniqueness đã quan sát. Mod bằng có thể NoChanges; schema chung có thể normal merge. Không coi profile là tenant/RBAC. Hosted implementation chưa xác minh",
+      "sources": [
+        {
+          "path": "docs-site/manual/profiles.mdx",
+          "line": 5
+        },
+        {
+          "path": "qt/aqt/profiles.py",
+          "line": 212
+        },
+        {
+          "path": "qt/aqt/profiles.py",
+          "line": 659
+        },
+        {
+          "path": "qt/aqt/profiles.py",
+          "line": 681
+        },
+        {
+          "path": "qt/aqt/sync.py",
+          "line": 307
+        },
+        {
+          "path": "rslib/src/sync/http_server/mod.rs",
+          "line": 122
+        },
+        {
+          "path": "rslib/src/sync/collection/meta.rs",
+          "line": 59
+        },
+        {
+          "path": "qt/aqt/sync.py",
+          "line": 138
+        },
+        {
+          "path": "rslib/src/sync/collection/download.rs",
+          "line": 35
+        },
+        {
+          "path": "rslib/src/sync/collection/upload.rs",
+          "line": 79
+        },
+        {
+          "path": "rslib/src/sync/collection/tests.rs",
+          "line": 591
+        }
+      ]
+    },
+    {
+      "id": "BR-ANKI-028",
+      "title": "Media độc lập",
+      "when": "Sync hoặc Check Media",
+      "then": "Media sync riêng với collection; check tìm file thiếu/không dùng. Sync đăng ký thay đổi local, fetch remote mới trước upload pending. Tên chuẩn trùng nhưng hash khác: remote change chưa nhận làm download ghi đè dù local dirty rồi đánh clean. Nếu cursor đã bằng server và chỉ local dirty, upload thay server; winner phụ thuộc thứ tự request và cursor",
+      "unless": "Không quét tham chiếu trong template; static media dùng _. Sequential từ nền trống C1→C2 nhận nội dung C1; không suy thành quy tắc first/last writer cho mọi race. Local add_file collision/filename normalization là nhánh khác; không bảo đảm rollback filesystem khi lỗi; oracle server test cùng commit",
+      "sources": [
+        {
+          "path": "docs-site/manual/media.mdx",
+          "line": 24
+        },
+        {
+          "path": "rslib/src/sync/media/syncer.rs",
+          "line": 60
+        },
+        {
+          "path": "rslib/src/sync/media/changes.rs",
+          "line": 44
+        },
+        {
+          "path": "rslib/src/media/files.rs",
+          "line": 403
+        },
+        {
+          "path": "rslib/src/sync/media/database/client/mod.rs",
+          "line": 206
+        },
+        {
+          "path": "rslib/src/sync/media/database/server/entry/upload.rs",
+          "line": 35
+        },
+        {
+          "path": "rslib/src/sync/media/tests.rs",
+          "line": 278
+        },
+        {
+          "path": "rslib/src/backend/sync.rs",
+          "line": 188
+        },
+        {
+          "path": "rslib/src/sync/media/database/client/changetracker.rs",
+          "line": 56
+        },
+        {
+          "path": "rslib/src/media/files.rs",
+          "line": 165
+        }
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "id": "ERR-ANKI-000-01",
+      "trigger": "Note có số field values khác NoteType",
+      "expected": "Từ chối lưu qua guard; UI/localization chưa truy vết",
+      "source": {
+        "path": "rslib/src/notes/mod.rs",
+        "line": 198
+      }
+    },
+    {
+      "id": "ERR-ANKI-000-02",
+      "trigger": "NoteType thiếu field/template hoặc tên rỗng",
+      "expected": "Từ chối ở guard tương ứng; không giả định HTTP",
+      "source": {
+        "path": "rslib/src/notetype/mod.rs",
+        "line": 484
+      }
+    },
+    {
+      "id": "ERR-ANKI-000-03",
+      "trigger": "AnswerCard gửi current state không còn khớp",
+      "expected": "Từ chối với invalid input sau hiệu chỉnh elapsed seconds; UI key chưa xác minh",
+      "source": {
+        "path": "rslib/src/scheduler/answering/mod.rs",
+        "line": 335
+      }
+    },
+    {
+      "id": "ERR-ANKI-000-04",
+      "trigger": "Build filtered không tìm thấy card và allow_empty=false",
+      "expected": "SearchReturnedNoCards, không chấp nhận kết quả thao tác",
+      "source": {
+        "path": "rslib/src/scheduler/filtered/mod.rs",
+        "line": 178
+      }
+    },
+    {
+      "id": "ERR-ANKI-000-05",
+      "trigger": "Text row có first field rỗng",
+      "expected": "Đưa vào log.empty_first_field và tiếp tục các hàng khác",
+      "source": {
+        "path": "rslib/src/import_export/text/import.rs",
+        "line": 252
+      }
+    },
+    {
+      "id": "ERR-ANKI-000-06",
+      "trigger": "Text row không giải được deck hoặc NoteType",
+      "expected": "Ghi missing_deck hoặc missing_notetype trong kết quả hàng",
+      "source": {
+        "path": "rslib/src/import_export/text/import.rs",
+        "line": 266
+      }
+    },
+    {
+      "id": "ERR-ANKI-000-07",
+      "trigger": "Note import đối chiếu GUID nhưng NoteType không tương thích",
+      "expected": "Ghi conflicting, không cập nhật note như một match hợp lệ",
+      "source": {
+        "path": "rslib/src/import_export/text/import.rs",
+        "line": 401
+      }
+    },
+    {
+      "id": "ERR-ANKI-000-08",
+      "trigger": "Merge NoteType Normal với Cloze trong package",
+      "expected": "Trả ImportError::NotetypeKindMergeConflict",
+      "source": {
+        "path": "rslib/src/import_export/package/apkg/import/notes.rs",
+        "line": 234
+      }
+    }
+  ],
+  "nfr": [
+    {
+      "id": "NFR-ANKI-001",
+      "title": "Tính nguyên tử khi trả lời",
+      "status": "Code observed; runtime Not Run",
+      "method": "Fault injection tại các bước AnswerCard; xác nhận card/revlog/stats cùng rollback hoặc cùng commit; fixture collection tạm; nguồn answering/mod.rs:315."
+    },
+    {
+      "id": "NFR-ANKI-002",
+      "title": "Bảo toàn lịch card cũ khi nhập apkg",
+      "status": "Code observed; runtime Not Run",
+      "method": "Nhập gói có GUID/card ordinal cũ và mới vào fixture; so due/interval/revlog trước-sau; nguồn apkg/import/cards.rs:99."
+    },
+    {
+      "id": "NFR-ANKI-003",
+      "title": "Khả năng khôi phục",
+      "status": "As-Is scope observed; RPO/RTO TBD owner vận hành",
+      "method": "Restore backup text/scheduling và colpkg có media trên profile tạm; so số note/card và asset; đo thời gian theo kích thước thực, chưa đặt SLA; nguồn backups.mdx:7."
+    },
+    {
+      "id": "NFR-ANKI-004",
+      "title": "Hiệu năng queue/search/import",
+      "status": "TBD owner sản phẩm/kỹ thuật; chưa benchmark",
+      "method": "Chọn bộ dữ liệu đại diện và máy/OS cố định; đo p50/p95, memory, số card, thời gian cold/warm; chỉ chốt ngưỡng sau bằng chứng."
+    },
+    {
+      "id": "NFR-ANKI-005",
+      "title": "Tương thích giao thức và dữ liệu",
+      "status": "Doc observed; matrix client/version TBD",
+      "method": "Kiểm thử round-trip apkg/colpkg và sync với từng version được owner chọn; source desktop không chứng minh hành vi mobile; nguồn README.md:9 và manual/sync-server.mdx:7."
+    },
+    {
+      "id": "NFR-ANKI-006",
+      "title": "Khả dụng và thao tác bàn phím",
+      "status": "Doc observed; accessibility audit Not Run",
+      "method": "Thử Study Now/Show Answer/rating bằng bàn phím, focus và trình đọc màn hình; chưa cam kết WCAG; nguồn studying.mdx:216."
+    },
+    {
+      "id": "NFR-ANKI-007",
+      "title": "Bảo mật dữ liệu và extension",
+      "status": "TBD owner bảo mật; chưa audit",
+      "method": "Xác lập threat model local collection/account/addons; rà credential storage, transport, log redaction, mã addon theo deployment thật; không gán encryption at rest/TLS version chưa thấy."
+    },
+    {
+      "id": "NFR-ANKI-008",
+      "title": "Tính truy vết dữ liệu học",
+      "status": "Code observed; runtime Not Run",
+      "method": "So rating/time/type ở revlog với thao tác thực; kiểm tra cap timer, preview và manual/reschedule exclusions; nguồn answering/mod.rs:330 và stats/graphs/today.rs:17."
+    }
+  ]
+}

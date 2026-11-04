@@ -1,0 +1,21 @@
+flowchart LR
+    U[Người dùng cục bộ] --> CONTENT
+    U --> STUDY
+    U --> DATA
+    U --> ENV
+    subgraph DESKTOP[Phạm vi Anki Desktop]
+        CONTENT[UC001 Note và NoteType - UC002 Cloze và IO - UC003 Deck và Search]
+        STUDY[UC004 Học và thống kê - UC005 Cấu hình học - UC006 Bury và Filtered]
+        DATA[UC007 Text import - UC008 Package - UC009 Sync và Media]
+        ENV[UC010 Profile backup và addon]
+        COL[Collection DB và media cục bộ]
+        CONTENT --> COL
+        STUDY --> COL
+        DATA --> COL
+        ENV --> COL
+    end
+    SERVER[AnkiWeb hoặc sync server] <--> DATA
+    MOBILE[Client khác cùng tài khoản] <--> SERVER
+    FILE[Text apkg colpkg và media files] <--> DATA
+    FILE <--> ENV
+    ADDON[Addon Python đã cài] --> ENV

@@ -1,0 +1,41 @@
+{
+  "documents": 24,
+  "local_links": 115,
+  "pinned_source_links": 1184,
+  "catalog": {
+    "FR": 20,
+    "BR": 28,
+    "ERR": 8,
+    "NFR": 8
+  },
+  "qa": {
+    "stories": 20,
+    "scenarios": 86,
+    "tests": 86
+  },
+  "computed_coverage": {
+    "FR": {
+      "mapped": 20,
+      "total": 20,
+      "missing": []
+    },
+    "BR": {
+      "mapped": 28,
+      "total": 28,
+      "missing": []
+    },
+    "ERR": {
+      "mapped": 8,
+      "total": 8,
+      "missing": []
+    },
+    "AC": {
+      "mapped": 86,
+      "total": 86,
+      "missing": []
+    }
+  },
+  "errors": [],
+  "warnings": [],
+  "runtime_tests_executed": 0
+}

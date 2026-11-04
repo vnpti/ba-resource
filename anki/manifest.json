@@ -1,0 +1,434 @@
+{
+  "package": "Anki BA documentation",
+  "version": "1.0.1",
+  "status": "Draft",
+  "date": "2026-11-03",
+  "source_commit": "136bd42bfbd356fc756b6d3e28cc77b02da11ea7",
+  "test_execution": "0/86; all Not Run",
+  "design_coverage": {
+    "FR": {
+      "covered": 20,
+      "total": 20,
+      "missing": []
+    },
+    "BR": {
+      "covered": 28,
+      "total": 28,
+      "missing": []
+    },
+    "ERR": {
+      "covered": 8,
+      "total": 8,
+      "missing": []
+    },
+    "AC": {
+      "covered": 86,
+      "total": 86,
+      "missing": []
+    }
+  },
+  "resolved_oracles": [
+    "AC-ANKI-035",
+    "AC-ANKI-067",
+    "AC-ANKI-072",
+    "AC-ANKI-077"
+  ],
+  "design_blocked": [],
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2719,
+      "sha256": "1f334e94cf100c489539ec479ab066466861922a26957f6336915897123feb18"
+    },
+    {
+      "path": "dist/anki-ba-documentation.docx",
+      "bytes": 1181463,
+      "sha256": "01169b1a7c86e26a1dceef50f1561a5551474895a16d5f2ea9cbdd2fd7cfe923"
+    },
+    {
+      "path": "dist/anki-ba-documentation.html",
+      "bytes": 1265971,
+      "sha256": "7f419bf0fd9f4a86bd55751a86b16bccfe350ddff7df7ff0428277b5a577aa21"
+    },
+    {
+      "path": "dist/anki-ba-documentation.pdf",
+      "bytes": 4582666,
+      "sha256": "3842c252987437d8b40e722d147c7989ebb769e2d29aac1a5407387b33d76788"
+    },
+    {
+      "path": "docs/anki/00-index.md",
+      "bytes": 5128,
+      "sha256": "e7da9c52c6df4e1d080a6511c1cee9d6fcda959822c5539e530d4c8a6c4cf477"
+    },
+    {
+      "path": "docs/anki/01-prd.md",
+      "bytes": 5227,
+      "sha256": "8e4cdb8c9dfcbf499f932cb585c3ae1c3c40b2603d73f3633bf91116fc5896d5"
+    },
+    {
+      "path": "docs/anki/05-urd.md",
+      "bytes": 6593,
+      "sha256": "d8a663f311b292c20eb543b95a5acae2b6d4d672e52e0f090f329f7cdd03d10e"
+    },
+    {
+      "path": "docs/anki/06-brd.md",
+      "bytes": 6977,
+      "sha256": "6611755e9d553d75bf77d99d442875bb0e1b2a6c036ce999a3dafcb96bc44809"
+    },
+    {
+      "path": "docs/anki/diagrams/flows.md",
+      "bytes": 7609,
+      "sha256": "b4212745787d317516aa56346133967a3240201ecb9faa1d70e6f2e0edc3b2ba"
+    },
+    {
+      "path": "docs/anki/diagrams/rendered/diagram-01.mmd",
+      "bytes": 1168,
+      "sha256": "f18b3875a52f685a70a9d5b1d926582080872bb43cd8fad8cb512700eb8a81fb"
+    },
+    {
+      "path": "docs/anki/diagrams/rendered/diagram-01.png",
+      "bytes": 242203,
+      "sha256": "3ee092fb5a88edf0e81509e19efc0c0bdc0a10e3e4477532f09289c228cb6cf6"
+    },
+    {
+      "path": "docs/anki/diagrams/rendered/diagram-01.svg",
+      "bytes": 113101,
+      "sha256": "b6bbc919f63bf382530099197b96edb48ee0e822d64c50138d8c7842e8e02838"
+    },
+    {
+      "path": "docs/anki/diagrams/rendered/diagram-02.mmd",
+      "bytes": 356,
+      "sha256": "322a3e8946852953ab3456dc8ef26035ce7faf5c0887895312bd888fbb7557d4"
+    },
+    {
+      "path": "docs/anki/diagrams/rendered/diagram-02.png",
+      "bytes": 234150,
+      "sha256": "15c610dd540be3b0ab066fdce552d95e6041872146bfca078a29dd5b834e0dd5"
+    },
+    {
+      "path": "docs/anki/diagrams/rendered/diagram-02.svg",
+      "bytes": 166082,
+      "sha256": "3fb1077fc7b1be4971aa2376e53ddc3a940c3895200744d46d404f6bd5b285fd"
+    },
+    {
+      "path": "docs/anki/diagrams/rendered/diagram-03.mmd",
+      "bytes": 331,
+      "sha256": "bd1cac6a79d4dec963d970bb2855fd398497f3b62b9a777c0e6c3ad9248f9859"
+    },
+    {
+      "path": "docs/anki/diagrams/rendered/diagram-03.png",
+      "bytes": 171047,
+      "sha256": "531aca7bde60393aadb7b3df42da76e1d6c3faa60e2061a3098548da2bb24acb"
+    },
+    {
+      "path": "docs/anki/diagrams/rendered/diagram-03.svg",
+      "bytes": 155561,
+      "sha256": "efce1770c0cb9516203d94b51dcd94682ddcd8cb187d765516cfb376be68e79d"
+    },
+    {
+      "path": "docs/anki/diagrams/rendered/diagram-04.mmd",
+      "bytes": 597,
+      "sha256": "7bbddbd6f600548ace5bc2753cd17ec3d85e1f50a1cbdda7399d25181ff4280c"
+    },
+    {
+      "path": "docs/anki/diagrams/rendered/diagram-04.png",
+      "bytes": 150104,
+      "sha256": "1939620b9799a801da450bddf146e0653d7949ab9ba0680350a0b5a15bed5ebd"
+    },
+    {
+      "path": "docs/anki/diagrams/rendered/diagram-04.svg",
+      "bytes": 24944,
+      "sha256": "bd2ca6de91b89f8806acb152dca4dcef2910e8c2378173050be6c7c202033ad3"
+    },
+    {
+      "path": "docs/anki/diagrams/rendered/diagram-05.mmd",
+      "bytes": 1266,
+      "sha256": "8ad3368454f1de3720bdd6d5df51aa1f25eee40a5fc02cd934a56a072ed6e05d"
+    },
+    {
+      "path": "docs/anki/diagrams/rendered/diagram-05.png",
+      "bytes": 262614,
+      "sha256": "0e376a7640507069067d22ec8aa100aebbba6a5bea9b8ec5e2410b669a3865aa"
+    },
+    {
+      "path": "docs/anki/diagrams/rendered/diagram-05.svg",
+      "bytes": 31458,
+      "sha256": "906ec989ae73e409b4dd3bd322398f382d1132db1a5e7b1afeec0afe2bfffee6"
+    },
+    {
+      "path": "docs/anki/diagrams/rendered/diagram-06.mmd",
+      "bytes": 805,
+      "sha256": "571c6405673881a27a80fd33c50e39220e6e1bd14afec7228a1916789a13be73"
+    },
+    {
+      "path": "docs/anki/diagrams/rendered/diagram-06.png",
+      "bytes": 164636,
+      "sha256": "1b05411c33be9d2eda37aa5e7c518ad55094af761051cbd6dd0d6a04916a6099"
+    },
+    {
+      "path": "docs/anki/diagrams/rendered/diagram-06.svg",
+      "bytes": 23495,
+      "sha256": "0fb90694b705a2246691881353c90e7887b4110a1dceb709f444ac78418205c0"
+    },
+    {
+      "path": "docs/anki/governance/decisions-and-handoff.md",
+      "bytes": 6751,
+      "sha256": "20805a418d899161106e257b1dd94c773548620bef5cf7472b75c1d14770f10d"
+    },
+    {
+      "path": "docs/anki/governance/evidence-and-scope.md",
+      "bytes": 6287,
+      "sha256": "b1049afcf5806ad5d5a3cb65fc26e963864c7cd26be86c9776906999c2927cb0"
+    },
+    {
+      "path": "docs/anki/srs/code-derived-spec.md",
+      "bytes": 20466,
+      "sha256": "d358bc60d7f720541012e3ddc845416b0cd92b0e17c5c076abdc7f1c72339973"
+    },
+    {
+      "path": "docs/anki/srs/erd.md",
+      "bytes": 26044,
+      "sha256": "e531f610dfed0af0a41f5cc53b11952c86567721bd4090d7ff4339a8e5607ce3"
+    },
+    {
+      "path": "docs/anki/srs/requirements.json",
+      "bytes": 46423,
+      "sha256": "97022ebdc166220d782c0a50124f40e3e786b0c0f5a9aafbba7bda90dd1c221f"
+    },
+    {
+      "path": "docs/anki/srs/spec.md",
+      "bytes": 68986,
+      "sha256": "0ef60610ef73885eaf51edbac52ab33ad1f95a74a0dd5ebcec2e0badcd1f2969"
+    },
+    {
+      "path": "docs/anki/srs/states.md",
+      "bytes": 13939,
+      "sha256": "12baa34c2509c94b4518557715da0832a8529bcd07d11771c7909df2590a3b68"
+    },
+    {
+      "path": "docs/anki/test/qa-catalog.json",
+      "bytes": 150228,
+      "sha256": "4197a235e6a21e62596c07c5ce8bb92c9dfe77338d78ace69c130bd803815efd"
+    },
+    {
+      "path": "docs/anki/test/test-cases.md",
+      "bytes": 213630,
+      "sha256": "8ceab06ed41cc4da5cfbef7e29d9a557ee87b606226c7455a8b6066781d1c66d"
+    },
+    {
+      "path": "docs/anki/test/traceability.csv",
+      "bytes": 8495,
+      "sha256": "691753dd6939f11327c12bf36ab2f2e9e0ec7b52abb809dbed2068ab830a1695"
+    },
+    {
+      "path": "docs/anki/usecases/UC-ANKI-001.md",
+      "bytes": 6338,
+      "sha256": "5a6b907fe2e2e3f549819b4bfcd27a2c9a2269fb584f09867c8ffc4758d93483"
+    },
+    {
+      "path": "docs/anki/usecases/UC-ANKI-002.md",
+      "bytes": 5804,
+      "sha256": "f6cc5936b3a47f6f2b469af6cf681be6668c2e5f868c68d76bd66abdd17c6f8b"
+    },
+    {
+      "path": "docs/anki/usecases/UC-ANKI-003.md",
+      "bytes": 5439,
+      "sha256": "260287619fd936e4aeceda0dd3bdba73609679fd1e471fd836c6280cc82d70a6"
+    },
+    {
+      "path": "docs/anki/usecases/UC-ANKI-004.md",
+      "bytes": 8878,
+      "sha256": "66b421980aa664397976152b274edf1105a5a125e86219b8f02a1306d8fb73e3"
+    },
+    {
+      "path": "docs/anki/usecases/UC-ANKI-005.md",
+      "bytes": 8457,
+      "sha256": "95ff504aaac4120e0226f8eec58f49ac642d8c017726974450120d345519dfdf"
+    },
+    {
+      "path": "docs/anki/usecases/UC-ANKI-006.md",
+      "bytes": 6471,
+      "sha256": "c0b636db5a5565fa86a2dfe94689c6ac09f189059dead4056a37ae92ab019949"
+    },
+    {
+      "path": "docs/anki/usecases/UC-ANKI-007.md",
+      "bytes": 6198,
+      "sha256": "b08369796f7ddddd38c7133f8a48f2f526a397e42d971d86183c176b855694a3"
+    },
+    {
+      "path": "docs/anki/usecases/UC-ANKI-008.md",
+      "bytes": 6022,
+      "sha256": "1779e22906ffcb7f9823b447b2a9fd90a2e46e3aa395b02b3ffbe2950b1ee7d3"
+    },
+    {
+      "path": "docs/anki/usecases/UC-ANKI-009.md",
+      "bytes": 9071,
+      "sha256": "cee15601fc9a24bf588c7f47a21c9cf49576e0e82c518987eb3a2abf71866e57"
+    },
+    {
+      "path": "docs/anki/usecases/UC-ANKI-010.md",
+      "bytes": 9680,
+      "sha256": "5bbc67249032e543bc7dfab4de33f24849e1bf38fcad8afbcdd182c58ead39ec"
+    },
+    {
+      "path": "docs/anki/userstories/acceptance-criteria.md",
+      "bytes": 112318,
+      "sha256": "af8034e5d21ae44cf2284f5a46e29016ec2beb98ed5d0a779242e57bdf0f97e9"
+    },
+    {
+      "path": "docs/anki/userstories/backlog.md",
+      "bytes": 57882,
+      "sha256": "a189b029dabbb0d0f5c499c960529b087feaa094e2d5632a766626981ed5f3b9"
+    },
+    {
+      "path": "docs/anki-business-analysis.md",
+      "bytes": 24427,
+      "sha256": "e5552c255f57bda2e3babeab73336268e780eb80dcc22e3152c07f3fd462c2d1"
+    },
+    {
+      "path": "evidence/fixtures/media-a.png",
+      "bytes": 69,
+      "sha256": "b1ff9c8ea3a780bad09b346c423d2d0e46815926879b18e841d928376a946640"
+    },
+    {
+      "path": "evidence/fixtures/media-b.png",
+      "bytes": 69,
+      "sha256": "fce481932ea5d07a91c7991c09fdadb4bf78f9b4cc8f927188384231f9d12679"
+    },
+    {
+      "path": "evidence/oracle-resolutions-2026-11-03.json",
+      "bytes": 19414,
+      "sha256": "f9a0550d843d3fcf3998b95008090298a177f6d6dfdc72a98d504873fc3dfb09"
+    },
+    {
+      "path": "evidence/rea-business-extract.json",
+      "bytes": 11172,
+      "sha256": "342ef2f6ca031f42e59edc6a4a050c9f1b7a8c1a692342a6950ebb870961790c"
+    },
+    {
+      "path": "evidence/rea-deck-options.json",
+      "bytes": 4708601,
+      "sha256": "1db30ec256888b8209f68b2ba496ff11b1be13017e17a71933391608c3d7d72d"
+    },
+    {
+      "path": "plans/2026-11-02-anki-business-analysis/plan.md",
+      "bytes": 2778,
+      "sha256": "4effeaef0eb1db8c885dfdba9706a8179e5c3590d5de676b2f9cd1aedf995e49"
+    },
+    {
+      "path": "plans/2026-11-03-oracle-ba-refresh/changed-documents.json",
+      "bytes": 558,
+      "sha256": "3f3b178555a7480d0c93cc7f4d22d8a5618e4acf99a8dd20c6bd8eadc1e6e820"
+    },
+    {
+      "path": "plans/2026-11-03-oracle-ba-refresh/export-validation.json",
+      "bytes": 4154,
+      "sha256": "0f909fd7f91b4fd8dbae0e4786e4c29c9dace33d6ee79bacee6aaa21500bcc87"
+    },
+    {
+      "path": "plans/2026-11-03-oracle-ba-refresh/html-validation.json",
+      "bytes": 331,
+      "sha256": "0639ea5a5951912c63e362ec13fdf78549ce85c3704f08cfc96ecf08c7aa5fc1"
+    },
+    {
+      "path": "plans/2026-11-03-oracle-ba-refresh/plan.md",
+      "bytes": 3377,
+      "sha256": "6e756d61a6367f38b7518276f983cb7184216d506f3e9f4ba636abbf4120fe1a"
+    },
+    {
+      "path": "plans/2026-11-03-oracle-ba-refresh/validation.json",
+      "bytes": 626,
+      "sha256": "983a8bfeaddac2f02b1bd9528da92546cea74e842d87738eb4a399b03a9430f1"
+    },
+    {
+      "path": "plans/reports/2026-11-03-fsrs-oracle.md",
+      "bytes": 24948,
+      "sha256": "5c12780180d01335cf1579868849dcc97a921df10a230555b4524ea287c4ed2f"
+    },
+    {
+      "path": "plans/reports/2026-11-03-integrated-oracle-review.md",
+      "bytes": 5155,
+      "sha256": "e7465a60d8b0c2396e4369da8a99b435d6ca99707596157a82d2c5b1c26846a4"
+    },
+    {
+      "path": "plans/reports/2026-11-03-oracle-review.md",
+      "bytes": 11639,
+      "sha256": "1e8acbf654a418a6182b50cdf3d3a13bf453b3c14c653ac6cda8d023f4e620f8"
+    },
+    {
+      "path": "plans/reports/2026-11-03-retention-oracle.md",
+      "bytes": 17487,
+      "sha256": "1798c2f2f67bd8b87efac541644daa39820ac9ee17977b706b2b7642cf113323"
+    },
+    {
+      "path": "plans/reports/2026-11-03-sync-media-oracles.md",
+      "bytes": 29070,
+      "sha256": "6d3e4ef96a81ad9fb7d5b3ecb0d111a96126beb907e6331bb708b801b7575314"
+    },
+    {
+      "path": "plans/reports/2026-11-03-visual-part1.md",
+      "bytes": 2124,
+      "sha256": "f8d7d9346b2d3922af87107c23ea81e17d73e397e2ec686fbd5c79998a689871"
+    },
+    {
+      "path": "plans/reports/2026-11-03-visual-part2.md",
+      "bytes": 2255,
+      "sha256": "fe23f3334c30d7940bea10c464406098bb92d5105127ba2c94c1e348e927218a"
+    },
+    {
+      "path": "plans/reports/2026-11-03-visual-part3.md",
+      "bytes": 2499,
+      "sha256": "5e6ba7157fa27258b676edf782a7fd8efb114530415eaacce3387c718e92d700"
+    },
+    {
+      "path": "plans/reports/ba-visual-pages-001-070.md",
+      "bytes": 5832,
+      "sha256": "94636b04bcbfa50670c156be2f264e14d21b83d096e0e6cc3d6ad3d6580ab70c"
+    },
+    {
+      "path": "plans/reports/ba-visual-pages-071-140.md",
+      "bytes": 7887,
+      "sha256": "e1e4a87f557f6efbc4a517ebe9a955030c01553073292d0fef70a5d3b471e192"
+    },
+    {
+      "path": "plans/reports/ba-visual-pages-141-205.md",
+      "bytes": 4899,
+      "sha256": "eb51fb6b3eb3a5353f15c7fe67f1f3d61e53ebb223cdee267c50404cf41e07f6"
+    },
+    {
+      "path": "plans/reports/content-business.md",
+      "bytes": 29790,
+      "sha256": "8a20be97c6d549a0f5b5f0cb56a176a3a0b5bdfefe0775518f7661e6758e5f8e"
+    },
+    {
+      "path": "plans/reports/learning-business.md",
+      "bytes": 16463,
+      "sha256": "79a8f73f73834114c56d6373bad5c86b2b319e707d3bbc0663d285581e00bb76"
+    },
+    {
+      "path": "scripts/export-ba-docx.py",
+      "bytes": 10971,
+      "sha256": "0c8ff464cb740f62584ec4ae915c885203e412401846307acf1c1d627427ca37"
+    },
+    {
+      "path": "scripts/export-ba-html.mjs",
+      "bytes": 11134,
+      "sha256": "1c8653d83254a86153e5e1c7aa67159e258dd54e360a63db19345c626fc4b6b3"
+    },
+    {
+      "path": "scripts/package-ba-bundle.py",
+      "bytes": 2394,
+      "sha256": "a6282bb2e709c4636e627fc3e00a3d51dd096c2e55d237c383f093bbd2b9c661"
+    },
+    {
+      "path": "scripts/validate-ba-bundle.py",
+      "bytes": 6603,
+      "sha256": "2541a5560de6031ae501215f76c48606e9294beda311e720350bde0fe6c40e81"
+    },
+    {
+      "path": "scripts/validate-ba-html.mjs",
+      "bytes": 1940,
+      "sha256": "bfd1c9831d62183f163ba3c84ba1e318bb7b5da8268fc6c9572d1f8632baebea"
+    }
+  ]
+}
